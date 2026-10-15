@@ -130,6 +130,86 @@
   color: var(--nav-glow);
 }
 
+.album-section {
+  border-top: 1px solid var(--nav-line);
+  margin: 0;
+  padding: 0 0 0.35rem;
+}
+
+.menu-label {
+  margin: 0.75rem 1.15rem 0.2rem;
+  font-family: "Source Sans 3", "Segoe UI", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #657068;
+}
+
+.album-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.15rem 0 0.2rem;
+}
+
+.album-list li {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.site-menu .album-list a,
+.album-here {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.38rem 1rem;
+  color: var(--nav-ink);
+  font-family: "Source Sans 3", "Segoe UI", sans-serif;
+  font-size: 0.94rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+  text-decoration: none;
+}
+
+.album-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.album-list img {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.site-menu .album-list a:hover {
+  color: var(--nav-glow);
+  background: rgba(61, 92, 74, 0.06);
+}
+
+.album-here {
+  color: #657068;
+  cursor: default;
+}
+
+.album-here img {
+  opacity: 0.72;
+}
+
+.here-label {
+  display: block;
+  margin-top: 0.12rem;
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: #657068;
+}
+
 @media (max-width: 760px) {
   :root {
     --nav-size: 64px;
@@ -138,6 +218,30 @@
 
   body > main {
     padding-top: 96px;
+  }
+
+  .site-menu {
+    width: min(22.5rem, calc(100vw - 28px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)));
+  }
+
+  .album-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.35rem 0.2rem;
+    padding: 0.15rem 0.55rem 0.45rem;
+  }
+
+  .site-menu .album-list a,
+  .album-here {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.25rem 0.5rem;
+    text-align: center;
+  }
+
+  .album-text {
+    align-items: center;
   }
 }
 

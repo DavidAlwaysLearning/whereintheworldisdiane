@@ -1,6 +1,7 @@
 /* Site menu. Add a destination by appending one entry. The open menu lists every other destination.
    Subscribe confirmation and thank-you pages are not destinations.
-   Scores is the shared library for every album. */
+   Scores is the shared library for every album.
+   Albums lists all eight albums, newest first. The current site is a muted "You're here" row. */
 (function () {
   var pages = [
     { href: "/", label: "Album" },
@@ -11,6 +12,17 @@
     "/subscribe/confirmed/",
     "/thank-you/",
     "/thanks/"
+  ];
+
+  var albums = [
+    { href: "https://lackadaisicalperfection.com/", host: "lackadaisicalperfection.com", title: "Lackadaisical Perfection", file: "lackadaisical-perfection" },
+    { href: "https://pianoreveries.com/", host: "pianoreveries.com", title: "Piano Reveries and Phantasies", file: "piano-reveries" },
+    { href: "https://smittenwiththemuses.com/", host: "smittenwiththemuses.com", title: "Smitten with the Muses", file: "smitten-with-the-muses" },
+    { href: "https://whereintheworldisdiane.com/", host: "whereintheworldisdiane.com", title: "Where In The World Is Diane", file: "where-in-the-world-is-diane" },
+    { href: "https://cleancalmpiano.com/", host: "cleancalmpiano.com", title: "Clean Calm Piano", file: "clean-calm-piano" },
+    { href: "https://tantalizingproof.com/", host: "tantalizingproof.com", title: "Tantalizing Proof", file: "tantalizing-proof" },
+    { href: "https://pianoincolors.com/", host: "pianoincolors.com", title: "Piano In Colors", file: "piano-in-colors" },
+    { href: "https://melodicsubtlety.com/", host: "melodicsubtlety.com", title: "Melodic Subtlety – Solo Piano", file: "melodic-subtlety" }
   ];
 
   function normalize(path) {
@@ -91,6 +103,66 @@
   menu.hidden = true;
   if ("inert" in menu) menu.inert = true;
   menu.appendChild(list);
+
+  var seenHost = (location.hostname || "").toLowerCase().replace(/^www\./, "");
+  var knownHost = albums.some(function (album) { return album.host === seenHost; });
+  var albumHost = knownHost ? seenHost : "whereintheworldisdiane.com";
+
+  var albumSection = document.createElement("section");
+  albumSection.className = "album-section";
+  albumSection.setAttribute("aria-labelledby", "album-menu-label");
+
+  var albumLabel = document.createElement("p");
+  albumLabel.id = "album-menu-label";
+  albumLabel.className = "menu-label";
+  albumLabel.textContent = "Albums";
+  albumSection.appendChild(albumLabel);
+
+  var albumList = document.createElement("ul");
+  albumList.className = "album-list";
+  albumList.setAttribute("role", "list");
+
+  albums.forEach(function (album) {
+    var item = document.createElement("li");
+    var thumb = document.createElement("img");
+    thumb.src = "/assets/albums/" + album.file + ".jpg";
+    thumb.srcset = "/assets/albums/" + album.file + ".jpg 1x, /assets/albums/" + album.file + "@2x.jpg 2x";
+    thumb.width = 48;
+    thumb.height = 48;
+    thumb.alt = "";
+    thumb.decoding = "async";
+
+    var title = document.createElement("span");
+    title.className = "album-title";
+    title.textContent = album.title;
+
+    var text = document.createElement("span");
+    text.className = "album-text";
+    text.appendChild(title);
+
+    var row;
+    if (album.host === albumHost) {
+      row = document.createElement("div");
+      row.className = "album-here";
+      row.setAttribute("aria-current", "page");
+      var note = document.createElement("span");
+      note.className = "here-label";
+      note.textContent = "You're here";
+      text.appendChild(note);
+    } else {
+      row = document.createElement("a");
+      row.href = album.href;
+      row.target = "_blank";
+      row.rel = "noopener";
+    }
+    row.appendChild(thumb);
+    row.appendChild(text);
+    item.appendChild(row);
+    albumList.appendChild(item);
+  });
+
+  albumSection.appendChild(albumList);
+  menu.appendChild(albumSection);
 
   document.body.appendChild(button);
   document.body.appendChild(menu);
