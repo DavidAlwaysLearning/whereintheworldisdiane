@@ -75,21 +75,14 @@
   }, true);
 })();
 
-/* Site menu. Add a destination by appending one entry. The open menu lists every other destination.
-   Subscribe confirmation and thank-you pages are not destinations.
-   Scores is the shared library for every album.
-   Albums lists all eight albums, newest first. The current site is a muted "You're here" row. */
+/* Site menu. Same destinations on every page: About, Scores, Subscribe, then the eight albums.
+   About, Scores, and Subscribe are the shared pages and open in a new tab.
+   Albums are newest first. This album is a muted "You're here" row. The others open in a new tab. */
 (function () {
   var pages = [
-    { href: "/", label: "Album" },
+    { href: "https://lackadaisicalperfection.com/about/", label: "About", blank: true },
     { href: "https://lackadaisicalperfection.com/scores/", label: "Scores", blank: true },
-    { href: "https://lackadaisicalperfection.com/about/", label: "About", blank: true }
-  ];
-
-  var excluded = [
-    "/subscribe/confirmed/",
-    "/thank-you/",
-    "/thanks/"
+    { href: "https://lackadaisicalperfection.com/subscribe/", label: "Subscribe", blank: true }
   ];
 
   var albums = [
@@ -100,31 +93,8 @@
     { href: "https://cleancalmpiano.com/", host: "cleancalmpiano.com", title: "Clean Calm Piano", file: "clean-calm-piano" },
     { href: "https://tantalizingproof.com/", host: "tantalizingproof.com", title: "Tantalizing Proof", file: "tantalizing-proof" },
     { href: "https://pianoincolors.com/", host: "pianoincolors.com", title: "Piano In Colors", file: "piano-in-colors" },
-    { href: "https://melodicsubtlety.com/", host: "melodicsubtlety.com", title: "Melodic Subtlety – Solo Piano", file: "melodic-subtlety" }
+    { href: "https://melodicsubtlety.com/", host: "melodicsubtlety.com", title: "Melodic Subtlety", file: "melodic-subtlety" }
   ];
-
-  function normalize(path) {
-    var p = path || "/";
-    var base = location.origin && location.origin !== "null"
-      ? location.origin
-      : "https://whereintheworldisdiane.com";
-    try {
-      p = new URL(p, base).pathname;
-    } catch (err) {
-      p = "/";
-    }
-    if (p === "/index.html" || p.slice(-11) === "/index.html") {
-      p = p.slice(0, -10);
-    }
-    if (p.charAt(p.length - 1) !== "/") p += "/";
-    return p;
-  }
-
-  function isExcluded(path) {
-    return excluded.some(function (item) {
-      return path === item || path.indexOf(item) === 0;
-    });
-  }
 
   function reducedMotion() {
     return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -135,12 +105,6 @@
     if (!link.rel || link.rel.indexOf("noopener") === -1) {
       link.rel = link.rel ? link.rel + " noopener" : "noopener";
     }
-  });
-
-  var here = normalize(location.pathname);
-  var links = pages.filter(function (page) {
-    var path = normalize(page.href);
-    return path !== here && !isExcluded(path);
   });
 
   var button = document.createElement("button");
@@ -161,7 +125,7 @@
 
   var list = document.createElement("ul");
   list.setAttribute("role", "list");
-  links.forEach(function (page) {
+  pages.forEach(function (page) {
     var item = document.createElement("li");
     var link = document.createElement("a");
     link.href = page.href;
